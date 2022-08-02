@@ -19,3 +19,21 @@ exports.selectArticleById = async (id) => {
   }
   return article[0];
 };
+
+exports.addVotesById = async (id, addedVotes) => {
+  const { inc_votes } = addedVotes;
+
+  const { rows: article } = await db.query(
+    "UPDATE articles SET votes = votes + $2 WHERE article_id = $1 RETURNING *;",
+    [id, inc_votes]
+  );
+
+  if (!article[0]) {
+    return Promise.reject({
+      status: 404,
+      msg: `No user found for article_id: ${id}`,
+    });
+  }
+
+  return article[0];
+};
