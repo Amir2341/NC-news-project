@@ -89,3 +89,40 @@ describe(" GET/api/articles/:article_id", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("status 200 votes updated on article", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .expect(200)
+      .send({ inc_votes: 1 })
+      .then(({ body: { article } }) => {
+        expect(article).toEqual({
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 101,
+        });
+      });
+  });
+  test("status 400 for non-number id", () => {
+    return request(app)
+      .get("/api/articles/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid id");
+      });
+  });
+
+  test("status 404 for id that does not exist", () => {
+    return request(app)
+      .get("/api/articles/1000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No user found for article_id: 1000");
+      });
+  });
+});
