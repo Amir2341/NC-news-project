@@ -63,6 +63,7 @@ describe(" GET/api/articles/:article_id", () => {
       .then(({ body: { article } }) => {
         expect(article).toEqual({
           article_id: 1,
+          comment_count: 11,
           title: "Living in the shadow of a great man",
           topic: "mitch",
           author: "butter_bridge",
