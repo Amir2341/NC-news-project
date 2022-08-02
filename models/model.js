@@ -17,7 +17,7 @@ exports.selectArticleById = async (id) => {
       msg: `No user found for article_id: ${id}`,
     });
   }
-  console.log(article[0]);
+
   return article[0];
 };
 
