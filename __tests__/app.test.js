@@ -72,7 +72,7 @@ describe(" GET/api/articles/:article_id", () => {
         });
       });
   });
-  test("status 404 for invalid id", () => {
+  test("status 404 for id that does not exist", () => {
     return request(app)
       .get("/api/articles/1000")
       .expect(404)
