@@ -3,9 +3,9 @@ const {
   selectArticleById,
   addVotesById,
   selectUsers,
-} = require("../models/topics-model");
+} = require("../models/model");
 
-exports.getTopics = (req, res, next) => {
+exports.getTopics = (req, res) => {
   selectTopics().then((topics) => {
     res.send({ topics });
   });
