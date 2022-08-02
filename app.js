@@ -4,7 +4,7 @@ const {
   getArticleById,
   updateArticleById,
   getUsers,
-} = require("./controllers/topics-controller");
+} = require("./controllers/controller");
 const {
   handleCustomErrors,
   handlePsqlErrors,
