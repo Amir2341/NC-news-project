@@ -37,3 +37,9 @@ exports.addVotesById = async (id, addedVotes) => {
 
   return article[0];
 };
+
+exports.selectUsers = async () => {
+  const { rows: users } = await db.query("SELECT * FROM users;");
+
+  return users;
+};
