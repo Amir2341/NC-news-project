@@ -7,7 +7,7 @@ exports.selectTopics = async () => {
 
 exports.selectArticleById = async (id) => {
   const { rows: article } = await db.query(
-    "SELECT * FROM articles WHERE article_id = $1",
+    "SELECT articles.* , COUNT(comments.article_id)::INTEGER AS comment_count FROM comments LEFT JOIN articles ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id",
     [id]
   );
 
@@ -17,6 +17,7 @@ exports.selectArticleById = async (id) => {
       msg: `No user found for article_id: ${id}`,
     });
   }
+
   return article[0];
 };
 
