@@ -52,3 +52,18 @@ exports.selectAllArticles = async () => {
 
   return articles;
 };
+
+exports.selectCommentsById = async (id) => {
+  const { rows: comments } = await db.query(
+    "SELECT * FROM comments WHERE article_id = $1",
+    [id]
+  );
+  if (comments.length === 0) {
+    return Promise.reject({
+      status: 404,
+      msg: `No user found for article_id: ${id}`,
+    });
+  }
+
+  return comments;
+};

@@ -4,6 +4,7 @@ const {
   addVotesById,
   selectUsers,
   selectAllArticles,
+  selectCommentsById,
 } = require("../models/model");
 
 exports.getTopics = (req, res) => {
@@ -46,4 +47,15 @@ exports.getAllArticles = (req, res) => {
   selectAllArticles().then((articles) => {
     res.send({ articles });
   });
+};
+
+exports.getCommentsById = (req, res, next) => {
+  const { article_id } = req.params;
+  selectCommentsById(article_id)
+    .then((comments) => {
+      res.send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
