@@ -199,6 +199,7 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then(({ body: { articles } }) => {
         expect(articles).toHaveLength(12);
+        expect(articles).toBeSortedBy("created_at", { descending: true });
         expect(articles).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
@@ -207,7 +208,6 @@ describe("GET /api/articles", () => {
               title: expect.any(String),
               topic: expect.any(String),
               author: expect.any(String),
-              body: expect.any(String),
               created_at: expect.any(String),
               votes: expect.any(Number),
             }),

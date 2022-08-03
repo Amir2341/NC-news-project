@@ -47,7 +47,7 @@ exports.selectUsers = async () => {
 
 exports.selectAllArticles = async () => {
   const { rows: articles } = await db.query(
-    "SELECT articles.* , COUNT(comments.article_id)::INTEGER AS comment_count FROM comments RIGHT JOIN articles ON comments.article_id = articles.article_id GROUP BY articles.article_id ORDER BY articles.created_at DESC "
+    "SELECT articles.article_id,articles.title,articles.topic,articles.author, articles.created_at,articles.votes, COUNT(comments.article_id)::INTEGER AS comment_count FROM comments RIGHT JOIN articles ON comments.article_id = articles.article_id GROUP BY articles.article_id ORDER BY articles.created_at DESC "
   );
 
   return articles;
