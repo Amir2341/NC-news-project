@@ -4,6 +4,7 @@ const {
   getArticleById,
   updateArticleById,
   getUsers,
+  getAllArticles,
 } = require("./controllers/controller");
 const {
   handleCustomErrors,
@@ -17,6 +18,8 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/users", getUsers);
+
+app.get("/api/articles", getAllArticles);
 
 app.patch("/api/articles/:article_id", updateArticleById);
 

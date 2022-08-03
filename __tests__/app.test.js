@@ -191,3 +191,28 @@ describe("/api/users", () => {
       });
   });
 });
+
+describe("GET /api/articles", () => {
+  test("status 200 return article array ", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(12);
+        expect(articles).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              comment_count: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            }),
+          ])
+        );
+      });
+  });
+});

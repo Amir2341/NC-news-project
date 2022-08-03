@@ -3,6 +3,7 @@ const {
   selectArticleById,
   addVotesById,
   selectUsers,
+  selectAllArticles,
 } = require("../models/model");
 
 exports.getTopics = (req, res) => {
@@ -38,5 +39,11 @@ exports.updateArticleById = (req, res, next) => {
 exports.getUsers = (req, res) => {
   selectUsers().then((users) => {
     res.send({ users });
+  });
+};
+
+exports.getAllArticles = (req, res) => {
+  selectAllArticles().then((articles) => {
+    res.send({ articles });
   });
 };
