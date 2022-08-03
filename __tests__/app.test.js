@@ -250,7 +250,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/1000/comments")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("No user found for article_id: 1000");
+        expect(body.msg).toBe("No comments found for article_id: 1000");
       });
   });
 });

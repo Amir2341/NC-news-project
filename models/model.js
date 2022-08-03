@@ -61,7 +61,7 @@ exports.selectCommentsById = async (id) => {
   if (comments.length === 0) {
     return Promise.reject({
       status: 404,
-      msg: `No user found for article_id: ${id}`,
+      msg: `No comments found for article_id: ${id}`,
     });
   }
 
