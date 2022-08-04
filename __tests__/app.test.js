@@ -253,4 +253,12 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Resource not found");
       });
   });
+  test("status 200 for article exists but no comment", () => {
+    return request(app)
+      .get("/api/articles/7/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual({ comments: [] });
+      });
+  });
 });
