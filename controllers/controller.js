@@ -6,6 +6,7 @@ const {
   selectAllArticles,
   selectCommentsById,
 } = require("../models/model");
+const { checkExists } = require("../utility");
 
 exports.getTopics = (req, res) => {
   selectTopics().then((topics) => {
@@ -51,8 +52,11 @@ exports.getAllArticles = (req, res) => {
 
 exports.getCommentsById = (req, res, next) => {
   const { article_id } = req.params;
-  selectCommentsById(article_id)
-    .then((comments) => {
+  Promise.all([
+    selectCommentsById(article_id),
+    checkExists("articles", "article_id", article_id),
+  ])
+    .then(([comments]) => {
       res.send({ comments });
     })
     .catch((err) => {

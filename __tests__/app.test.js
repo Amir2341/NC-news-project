@@ -247,10 +247,10 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
   test("status 404 for id that does not exist", () => {
     return request(app)
-      .get("/api/articles/1000/comments")
+      .get("/api/articles/100/comments")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("No comments found for article_id: 1000");
+        expect(body.msg).toBe("Resource not found");
       });
   });
 });
