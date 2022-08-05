@@ -5,6 +5,7 @@ const {
   selectUsers,
   selectAllArticles,
   selectCommentsById,
+  addCommentById,
 } = require("../models/model");
 const { checkExists } = require("../utility");
 
@@ -60,6 +61,19 @@ exports.getCommentsById = (req, res, next) => {
       res.send({ comments });
     })
     .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postCommentById = (req, res, next) => {
+  const { article_id } = req.params;
+
+  addCommentById(req.body, article_id)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      console.log(err);
       next(err);
     });
 };

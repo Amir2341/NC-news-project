@@ -258,7 +258,61 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/7/comments")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual({ comments: [] });
+        expect(body.comments.length).toBe(0);
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("status 201 object added", () => {
+    return request(app)
+      .post("/api/articles/3/comments")
+      .expect(201)
+      .send({
+        username: "butter_bridge",
+        body: "hi",
+      })
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            article_id: expect.any(Number),
+            body: expect.any(String),
+            author: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
+  test("status 400 for non-number id", () => {
+    return request(app)
+      .post("/api/articles/banana/comments")
+      .expect(400)
+      .send({ username: "butter_bridge", body: "hi" })
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid id");
+      });
+  });
+  test("status 400 for id that does not exist", () => {
+    return request(app)
+      .post("/api/articles/100/comments")
+      .expect(400)
+      .send({
+        username: "butter_bridge",
+        body: "hi",
+      })
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  test("status 400 for bad comment", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(400)
+      .send({ username: "butter_bridge" })
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
       });
   });
 });

@@ -6,6 +6,7 @@ const {
   getUsers,
   getAllArticles,
   getCommentsById,
+  postCommentById,
 } = require("./controllers/controller");
 const {
   handleCustomErrors,
@@ -25,6 +26,8 @@ app.get("/api/articles", getAllArticles);
 app.get("/api/articles/:article_id/comments", getCommentsById);
 
 app.patch("/api/articles/:article_id", updateArticleById);
+
+app.post("/api/articles/:article_id/comments", postCommentById);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Input not found" });
