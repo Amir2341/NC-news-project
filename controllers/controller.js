@@ -46,9 +46,8 @@ exports.getUsers = (req, res) => {
 };
 
 exports.getAllArticles = (req, res, next) => {
-  const { sort_by } = req.query;
-  const { order } = req.query;
-  const { topic } = req.query;
+  const { sort_by, order, topic } = req.query;
+
   selectAllArticles(sort_by, order, topic)
     .then((articles) => {
       res.send({ articles });

@@ -215,7 +215,7 @@ describe("GET /api/articles", () => {
         );
       });
   });
-  test("status 200 return article array sorted by author ", () => {
+  test("status 200 return article array with a sort_by query ", () => {
     return request(app)
       .get("/api/articles?sort_by=author")
       .expect(200)
@@ -237,7 +237,7 @@ describe("GET /api/articles", () => {
         );
       });
   });
-  test("status 200 return article array sorted by author and order asc ", () => {
+  test("status 200 return article array with a sort_by and order query ", () => {
     return request(app)
       .get("/api/articles?sort_by=author&&order=asc")
       .expect(200)
@@ -259,7 +259,7 @@ describe("GET /api/articles", () => {
         );
       });
   });
-  test("status 200 return article array sorted by created_at and order desc with topic cats", () => {
+  test("status 200 return article array with a topic query", () => {
     return request(app)
       .get("/api/articles?topic=cats")
       .expect(200)
@@ -281,12 +281,51 @@ describe("GET /api/articles", () => {
         );
       });
   });
-  test("status 404 invalid query", () => {
+  test("status 200 return article array with all queries", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author&&order=desc&&topic=mitch")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(11);
+        expect(articles).toBeSortedBy("author", { descending: true });
+        expect(articles).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              comment_count: expect.any(Number),
+              title: expect.any(String),
+              topic: "mitch",
+              author: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            }),
+          ])
+        );
+      });
+  });
+
+  test("status 404 invalid topic query", () => {
     return request(app)
       .get("/api/articles?topic=shoes")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Resource not found");
+      });
+  });
+  test("status 400 invalid sort by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=Invalid")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid query");
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  test("status 400 invalid order query", () => {
+    return request(app)
+      .get("/api/articles?order=Invalid")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
       });
   });
 });
@@ -368,10 +407,10 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Invalid id");
       });
   });
-  test("status 400 for id that does not exist", () => {
+  test("status 404 for id that does not exist", () => {
     return request(app)
       .post("/api/articles/100/comments")
-      .expect(400)
+      .expect(404)
       .send({
         username: "butter_bridge",
         body: "hi",
@@ -389,10 +428,10 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
-  test("status 400 for username does not exist", () => {
+  test("status 404 for username does not exist", () => {
     return request(app)
       .post("/api/articles/1/comments")
-      .expect(400)
+      .expect(404)
       .send({ username: "hi", body: "hi" })
       .then(({ body }) => {
         expect(body.msg).toBe("Bad Request");
