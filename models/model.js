@@ -83,3 +83,11 @@ exports.addCommentById = async (user, id) => {
 
   return comment[0];
 };
+
+exports.deleteComment = async (id) => {
+  const { rows: comment } = await db.query(
+    "DELETE FROM comments WHERE comment_id = $1 RETURNING *;",
+    [id]
+  );
+  return comment;
+};
