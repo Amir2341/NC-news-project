@@ -315,4 +315,13 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
+  test("status 400 for username does not exist", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(400)
+      .send({ username: "hi", body: "hi" })
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
 });
