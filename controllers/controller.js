@@ -4,7 +4,10 @@ const {
   addVotesById,
   selectUsers,
   selectAllArticles,
+  selectCommentsById,
+  addCommentById,
 } = require("../models/model");
+const { checkExists } = require("../utility");
 
 exports.getTopics = (req, res) => {
   selectTopics().then((topics) => {
@@ -46,4 +49,30 @@ exports.getAllArticles = (req, res) => {
   selectAllArticles().then((articles) => {
     res.send({ articles });
   });
+};
+
+exports.getCommentsById = (req, res, next) => {
+  const { article_id } = req.params;
+  Promise.all([
+    selectCommentsById(article_id),
+    checkExists("articles", "article_id", article_id),
+  ])
+    .then(([comments]) => {
+      res.send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postCommentById = (req, res, next) => {
+  const { article_id } = req.params;
+
+  addCommentById(req.body, article_id)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

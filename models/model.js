@@ -52,3 +52,22 @@ exports.selectAllArticles = async () => {
 
   return articles;
 };
+
+exports.selectCommentsById = async (id) => {
+  const { rows: comments } = await db.query(
+    "SELECT * FROM comments WHERE article_id = $1",
+    [id]
+  );
+
+  return comments;
+};
+
+exports.addCommentById = async (user, id) => {
+  const { username, body } = user;
+  const { rows: comment } = await db.query(
+    "INSERT INTO comments (author, body, article_id) VALUES ($1,$2,$3)  RETURNING *;",
+    [username, body, id]
+  );
+
+  return comment[0];
+};
