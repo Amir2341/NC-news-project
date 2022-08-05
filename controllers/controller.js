@@ -45,10 +45,17 @@ exports.getUsers = (req, res) => {
   });
 };
 
-exports.getAllArticles = (req, res) => {
-  selectAllArticles().then((articles) => {
-    res.send({ articles });
-  });
+exports.getAllArticles = (req, res, next) => {
+  const { sort_by } = req.query;
+  const { order } = req.query;
+  const { topic } = req.query;
+  selectAllArticles(sort_by, order, topic)
+    .then((articles) => {
+      res.send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getCommentsById = (req, res, next) => {

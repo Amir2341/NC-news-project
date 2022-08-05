@@ -215,6 +215,80 @@ describe("GET /api/articles", () => {
         );
       });
   });
+  test("status 200 return article array sorted by author ", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(12);
+        expect(articles).toBeSortedBy("author", { descending: true });
+        expect(articles).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              comment_count: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            }),
+          ])
+        );
+      });
+  });
+  test("status 200 return article array sorted by author and order asc ", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author&&order=asc")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(12);
+        expect(articles).toBeSortedBy("author");
+        expect(articles).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              comment_count: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            }),
+          ])
+        );
+      });
+  });
+  test("status 200 return article array sorted by created_at and order desc with topic cats", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(1);
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+        expect(articles).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              comment_count: expect.any(Number),
+              title: "UNCOVERED: catspiracy to bring down democracy",
+              topic: "cats",
+              author: "rogersop",
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            }),
+          ])
+        );
+      });
+  });
+  test("status 404 invalid query", () => {
+    return request(app)
+      .get("/api/articles?topic=shoes")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid query");
+      });
+  });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
