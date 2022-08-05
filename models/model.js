@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { checkExists } = require("../utility");
 
 exports.selectTopics = async () => {
   const { rows: topics } = await db.query("SELECT * FROM topics;");
@@ -45,10 +46,21 @@ exports.selectUsers = async () => {
   return users;
 };
 
-exports.selectAllArticles = async () => {
-  const { rows: articles } = await db.query(
-    "SELECT articles.article_id,articles.title,articles.topic,articles.author, articles.created_at,articles.votes, COUNT(comments.article_id)::INTEGER AS comment_count FROM comments RIGHT JOIN articles ON comments.article_id = articles.article_id GROUP BY articles.article_id ORDER BY articles.created_at DESC "
-  );
+exports.selectAllArticles = async (
+  sortBy = "created_at",
+  order = "desc",
+  topic
+) => {
+  let queryStr = `SELECT articles.article_id,articles.title,articles.topic,articles.author, articles.created_at,articles.votes, COUNT(comments.article_id)::INTEGER AS comment_count FROM comments RIGHT JOIN articles ON comments.article_id = articles.article_id  `;
+  let injectArr = [];
+  if (topic) {
+    await checkExists("articles", "topic", topic);
+    queryStr += ` WHERE topic = $1`;
+    injectArr.push(topic);
+  }
+
+  queryStr += `GROUP BY articles.article_id ORDER BY ${sortBy} ${order}`;
+  const { rows: articles } = await db.query(queryStr, injectArr);
 
   return articles;
 };
