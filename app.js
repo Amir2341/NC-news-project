@@ -7,6 +7,7 @@ const {
   getAllArticles,
   getCommentsById,
   postCommentById,
+  removeComment,
 } = require("./controllers/controller");
 const {
   handleCustomErrors,
@@ -28,6 +29,8 @@ app.get("/api/articles/:article_id/comments", getCommentsById);
 app.patch("/api/articles/:article_id", updateArticleById);
 
 app.post("/api/articles/:article_id/comments", postCommentById);
+
+app.delete("/api/comments/:comment_id", removeComment);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Input not found" });
