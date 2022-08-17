@@ -13,6 +13,7 @@ const {
   handleCustomErrors,
   handlePsqlErrors,
 } = require("./error-handling/errors");
+const endpoints = require("./endpoints.json");
 const app = express();
 app.use(express.json());
 
@@ -25,6 +26,9 @@ app.get("/api/users", getUsers);
 app.get("/api/articles", getAllArticles);
 
 app.get("/api/articles/:article_id/comments", getCommentsById);
+
+app.get("/api", (req, res) => res.send(endpoints));
+console.log(endpoints);
 
 app.patch("/api/articles/:article_id", updateArticleById);
 
