@@ -28,7 +28,6 @@ app.get("/api/articles", getAllArticles);
 app.get("/api/articles/:article_id/comments", getCommentsById);
 
 app.get("/api", (req, res) => res.send(endpoints));
-console.log(endpoints);
 
 app.patch("/api/articles/:article_id", updateArticleById);
 
