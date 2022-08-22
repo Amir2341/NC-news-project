@@ -14,6 +14,7 @@ const {
   handlePsqlErrors,
 } = require("./error-handling/errors");
 const endpoints = require("./endpoints.json");
+const cors = require("cors");
 const app = express();
 app.use(express.json());
 
@@ -42,5 +43,7 @@ app.all("/*", (req, res) => {
 app.use(handleCustomErrors);
 
 app.use(handlePsqlErrors);
+
+app.use(cors());
 
 module.exports = app;
