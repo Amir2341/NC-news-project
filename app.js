@@ -16,6 +16,7 @@ const {
 const endpoints = require("./endpoints.json");
 const cors = require("cors");
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
@@ -43,7 +44,5 @@ app.all("/*", (req, res) => {
 app.use(handleCustomErrors);
 
 app.use(handlePsqlErrors);
-
-app.use(cors());
 
 module.exports = app;
