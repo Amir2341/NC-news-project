@@ -6,7 +6,7 @@ We will be building an API for the purpose of accessing application data program
 
 Your database will be PSQL, and you will interact with it using [node-postgres](https://node-postgres.com/).
 
-Link to hosted version on [Heroku] (https://nc-news20.herokuapp.com/)
+Link to hosted version on [Heroku](https://nc-news20.herokuapp.com/)
 
 ## Setup
 
