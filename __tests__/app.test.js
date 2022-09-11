@@ -441,12 +441,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 
 describe("DELETE  /api/comments/:comment_id", () => {
   test("status 204 comment is deleted by id", () => {
-    return request(app)
-      .delete("/api/comments/1")
-      .expect(204)
-      .then(({ body: { comment } }) => {
-        expect(comment).toEqual(undefined);
-      });
+    return request(app).delete("/api/comments/1").expect(204);
   });
   test("status 400 for non-number id", () => {
     return request(app)
